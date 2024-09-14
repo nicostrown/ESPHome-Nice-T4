@@ -664,16 +664,16 @@ void NiceCover::send_array_cmd(const uint8_t *data, size_t len) {
   char br_ch = 0x00;
   this->flush();
 
- # uint32_t BAUD_WORK = this->parent_->get_baud_rate();
+// uint32_t BAUD_WORK = this->parent_->get_baud_rate();
 
   // send break at lower baund rate
-  #this->parent_->set_baud_rate(BAUD_BREAK);
+  //this->parent_->set_baud_rate(BAUD_BREAK);
   this->write_byte(br_ch);  // send zero at low speed
- # delayMicroseconds(90);    // add a delay to the wait, otherwise the speed will switch before sending. With a delay on
+ // delayMicroseconds(90);    // add a delay to the wait, otherwise the speed will switch before sending. With a delay on
                             // d1-mini, I got the perfect signal, break = 520us
 
   // send payload itself
- # this->parent_->set_baud_rate(BAUD_WORK);
+ // this->parent_->set_baud_rate(BAUD_WORK);
   this->write_array(&data[0], len);
 
   // print to log
