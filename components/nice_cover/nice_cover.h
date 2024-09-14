@@ -349,7 +349,7 @@ class NiceCover : public cover::Cover, public uart::UARTDevice, public Component
 
   uint8_t gate_class = UNKNOWN;
 
-  cover::CoverOperation last_published_current_operation = COVER_OPERATION_IDLE;
+  cover::CoverOperation last_published_current_operation = cover::COVER_OPERATION_IDLE;
   float last_published_position;
 
   uint16_t _max_opn = 0;     // maximum encoder or timer position

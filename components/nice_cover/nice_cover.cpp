@@ -7,9 +7,7 @@ namespace nice_cover {
 
 static const char *TAG = "nice_cover.cover";
 
-void NiceCover::setup() {}
 
-void NiceCover::loop() {}
 
 void NiceCover::dump_config() { ESP_LOGCONFIG(TAG, "Nice cover"); }
 
@@ -264,16 +262,16 @@ void NiceCover::parse_status_packet(const std::vector<uint8_t> &data) {
             case OPENED:
               ESP_LOGI(TAG, "  gate open");
               this->position = cover::COVER_OPEN;
-              this->current_operation = COVER_OPERATION_IDLE;
+              this->current_operation = cover::COVER_OPERATION_IDLE;
               break;
             case CLOSED:
               ESP_LOGI(TAG, "  gate close");
               this->position = cover::COVER_CLOSED;
-              this->current_operation = COVER_OPERATION_IDLE;
+              this->current_operation = cover::COVER_OPERATION_IDLE;
               break;
             case 0x01:
               ESP_LOGI(TAG, "  gate stopped");
-              this->current_operation = COVER_OPERATION_IDLE;
+              this->current_operation = cover::COVER_OPERATION_IDLE;
               //          this->position = COVER_OPEN;
               break;
           }
