@@ -8,9 +8,6 @@ namespace nice_cover {
 static const char *TAG = "nice_cover.cover";
 
 
-
-void NiceCover::dump_config() { ESP_LOGCONFIG(TAG, "Nice cover"); }
-
 cover::CoverTraits NiceCover::get_traits() {
   auto traits = cover::CoverTraits();
   traits.set_is_assumed_state(false);
@@ -48,7 +45,7 @@ void NiceCover::control(const cover::CoverCall &call) {
 void NiceCover::setup() {
   // force default state to closed and idle
   this->position = cover::COVER_CLOSED;
-  this->current_operation = COVER_OPERATION_IDLE;
+  this->current_operation = cover::COVER_OPERATION_IDLE;
 
   // who is online?
   this->tx_buffer.push(gen_inf_cmd(0x00, 0xff, FOR_ALL, WHO, GET, 0x00));
@@ -417,7 +414,7 @@ void NiceCover::parse_status_packet(const std::vector<uint8_t> &data) {
                 ESP_LOGI(TAG, "Command: Partial opening");
                 break;
               case STOPPED:
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 ESP_LOGI(TAG, "Command: Stopped");
                 break;
               case ENDTIME:
@@ -438,12 +435,12 @@ void NiceCover::parse_status_packet(const std::vector<uint8_t> &data) {
               case CLOSED:
                 ESP_LOGI(TAG, "Operation: Closed");
                 this->position = cover::COVER_CLOSED;
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 break;
               case OPENED:
                 this->position = cover::COVER_OPEN;
                 ESP_LOGI(TAG, "Operation: Opened");
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 // calibrate opened possition if the motor does not report max supported position
                 if (this->_max_opn == 0) {
                   this->_pos_opn = this->_pos_usl;
@@ -452,7 +449,7 @@ void NiceCover::parse_status_packet(const std::vector<uint8_t> &data) {
                 break;
               case STOPPED:
               case PARTIALLY_OPENED:
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 ESP_LOGI(TAG, "Operation: Stopped");
                 break;
               default:
@@ -478,15 +475,15 @@ void NiceCover::parse_status_packet(const std::vector<uint8_t> &data) {
               case CLOSED:
                 ESP_LOGI(TAG, "Movement: Closed");
                 this->position = cover::COVER_CLOSED;
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 break;
               case OPENED:
                 this->position = cover::COVER_OPEN;
                 ESP_LOGI(TAG, "Movement: Opened");
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 break;
               case STOPPED:
-                this->current_operation = COVER_OPERATION_IDLE;
+                this->current_operation = cover::COVER_OPERATION_IDLE;
                 ESP_LOGI(TAG, "Movement: Stopped");
                 break;
               default:
