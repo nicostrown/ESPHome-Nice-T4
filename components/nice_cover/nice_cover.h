@@ -55,6 +55,7 @@ you want to send to the destination (ADR, EPT). • EVT: This is the event that 
 namespace esphome {
 namespace nice_cover {
 
+  static const uint32_t BAUD_BREAK = 9200; /* baudrate for a long pulse before the packet */
   static const uint8_t START_CODE = 0x55; /* packet start byte */
   
 /* esp network settings
@@ -244,15 +245,19 @@ enum control_cmd : uint8_t {
 /*
 struct packet_cmd_body_t {
   uint8_t byte_55; // Title, always 0x55
-  uint8_t pct_size1; // Packet body size (without header and CRC. Total number of bytes minus three), for commands =
-0x0c uint8_t for_series; // series to whom package ff = to all uint8_t for_address; // address to whom package ff = to
-all uint8_t from_series; // series from whom package uint8_t from_address; // address from whom the package is uint8_t
-mes_type; // message type, 1 = CMD, 8 = INF uint8_t mes_size; // number of bytes further minus two CRC bytes at the end,
-for commands = 5 uint8_t crc1; // CRC1, XOR of the previous six bytes uint8_t cmd_mnu; // Command menu. cmd_mnu = 1 for
-control commands uint8_t setup_submnu; // The submenu, combined with the command group, determines the type of message
-to be sent. uint8_t control_cmd; // Command to be executed uint8_t offset; // Offset for responses. Affects queries like
-the list of supported commands uint8_t crc2; // crc2, XOR the previous four bytes uint8_t pct_size2; // packet body size
-(without header and CRC. Total number of bytes minus three), for commands = 0x0c
+  uint8_t pct_size1; // Packet body size (without header and CRC. Total number of bytes minus three), for commands = 0x0c 
+  uint8_t for_series; // series to whom package ff = to all uint8_t for_address; // address to whom package ff = to all
+  uint8_t from_series; // series from whom package 
+  uint8_t from_address; // address from whom the package is 
+  uint8_t mes_type; // message type, 1 = CMD, 8 = INF 
+  uint8_t mes_size; // number of bytes further minus two CRC bytes at the end, for commands = 5 
+  uint8_t crc1; // CRC1, XOR of the previous six bytes 
+  uint8_t cmd_mnu; // Command menu. cmd_mnu = 1 for control commands 
+  uint8_t setup_submnu; // The submenu, combined with the command group, determines the type of message to be sent. 
+  uint8_t control_cmd; // Command to be executed 
+  uint8_t offset; // Offset for responses. Affects queries like the list of supported commands 
+  uint8_t crc2; // crc2, XOR the previous four bytes 
+  uint8_t pct_size2; // packet body size (without header and CRC. Total number of bytes minus three), for commands = 0x0c
 
 };
 
