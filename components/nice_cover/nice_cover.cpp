@@ -67,7 +67,6 @@ void NiceCover::loop() {
   }
 
   while (this->available() > 0) {
-    ESP_LOGD(TAG, "Available %d", this->available());
     uint8_t c;
     this->read_byte(&c);
     this->last_received_byte_millis = millis();
