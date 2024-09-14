@@ -11,7 +11,7 @@ NiceCover = nice_cover_ns.class_("NiceCover", cover.Cover, cg.Component, uart.UA
 
 CONFIG_SCHEMA = cover.COVER_SCHEMA.extend(
     {cv.GenerateID(): cv.declare_id(NiceCover),
-     cv.Optional(CONF_USE_ADDRESS): cv.hex_uint16_t}
+     cv.Optional(CONF_ADDRESS): cv.hex_uint16_t}
 ).extend(cv.COMPONENT_SCHEMA).extend(uart.UART_DEVICE_SCHEMA)
 
 
