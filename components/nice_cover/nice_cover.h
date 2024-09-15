@@ -5,6 +5,7 @@
 #include "esphome/components/cover/cover.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/helpers.h"  // parse strings with built-in tools
+#include <HardwareSerial.h>
 #include <queue>
 
 /*
@@ -346,6 +347,9 @@ class NiceCover : public cover::Cover, public uart::UARTDevice, public Component
 
  protected:
   void control(const cover::CoverCall &call) override;
+
+  // variables for uart
+  uart_t *_uart = nullptr;
 
   uint32_t last_detect_millis = 0;
   uint32_t last_received_byte_millis = 0;

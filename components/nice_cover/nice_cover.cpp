@@ -47,6 +47,9 @@ void NiceCover::setup() {
   this->position = cover::COVER_CLOSED;
   this->current_operation = cover::COVER_OPERATION_IDLE;
 
+//_uart = uart_init(1, 19200, SERIAL_8N1, SERIAL_FULL, TX_P, 256, false);
+           // delay(500);
+
   // who is online?
   this->tx_buffer.push(gen_inf_cmd(0x00, 0xff, FOR_ALL, WHO, GET, 0x00));
 }
@@ -664,17 +667,28 @@ void NiceCover::send_array_cmd(const uint8_t *data, size_t len) {
   char br_ch = 0x00;
   this->flush();
 
+   // send break at lower baund rate
+            uart_set_baudrate(1, BAUD_BREAK);
+            uart_write_bytes(1, &br_ch, 1); // send zero at low speed
+            uart_wait_tx_done(1, 100000); // wait until the sending is completed. There is an error in the uart.h library (esp8266 core 3.0.2), waiting is not enough for further uart_set_baudrate().
+            delayMicroseconds(90); // add a delay to the wait, otherwise the speed will switch before sending. With a delay on d1-mini, I got the perfect signal, break = 520us
+
+            // send payload itself
+            uart_set_baudrate(1, 19200);
+            uart_write_bytes(1, &data[0], len);
+            uart_wait_tx_done(1,100000); // waiting for the completion of sending
+
 // uint32_t BAUD_WORK = this->parent_->get_baud_rate();
 
   // send break at lower baund rate
   //this->parent_->set_baud_rate(BAUD_BREAK);
-  this->write_byte(br_ch);  // send zero at low speed
+ // this->write_byte(br_ch);  // send zero at low speed
  // delayMicroseconds(90);    // add a delay to the wait, otherwise the speed will switch before sending. With a delay on
                             // d1-mini, I got the perfect signal, break = 520us
 
   // send payload itself
  // this->parent_->set_baud_rate(BAUD_WORK);
-  this->write_array(&data[0], len);
+  //this->write_array(&data[0], len);
 
   // print to log
   std::string pretty_cmd = format_hex_pretty((uint8_t *) &data[0], len);
